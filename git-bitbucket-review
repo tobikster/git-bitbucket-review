@@ -1,0 +1,17 @@
+#!/bin/bash
+DEFAULT_REPOSITORY_NAME="upstream"
+
+REPOSITORY_NAME=${1}
+if [ -z ${REPOSITORY_NAME} ]; then
+	echo "Please provide repository name"
+	exit 1
+fi
+
+PR_ID=$2
+if [ -z ${PR_ID} ]; then
+	echo "Please provide pull request ID"
+	exit 1
+fi
+
+
+git fetch ${REPOSITORY_NAME} pull-requests/${PR_ID}/from && git checkout FETCH_HEAD
