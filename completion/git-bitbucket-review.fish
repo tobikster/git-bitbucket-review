@@ -27,7 +27,7 @@ function __fish_get_bitbucket_pullrequests -d "Get open pull requests from the B
 	set -l base_pull_requests_uri (__fish_git config --get "bitbucketreview."$remote".pullrequestsurl") 
 	set -l pull_requests_uri $base_pull_requests_uri"?state=OPEN&order=OLDEST"
 
-	curl -s -LC - --oauth2-bearer "$oauth_token" "$pull_requests_uri" | jq -r '.values[] | [.id, .title] | @tsv' 2> /dev/null
+	curl -s -LC - --oauth2-bearer "$oauth_token" "$pull_requests_uri" | jq -r '.values[] | {"id": .id, "title": .title, "target": .toRef.displayId} | "\(.id)\t\(.title) -> \(.target)"' 2> /dev/null
 end
 
 set -l bitbucket_review_command "bitbucket-review"
