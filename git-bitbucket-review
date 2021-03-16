@@ -1,0 +1,24 @@
+#!/bin/bash
+usage() {
+	echo "usage: git bitbucket review REPOSITORY PR_ID"
+	echo
+	echo "    REPOSITORY   one of the \`git remote\`, which is configured with bitbucket review"
+	echo "    PR_ID        pull request ID"
+}
+
+cmd_review() {
+	REPOSITORY_NAME=${1}
+	if [ -z ${REPOSITORY_NAME} ]; then
+		usage
+		exit 1
+	fi
+
+	PR_ID=$2
+	if [ -z ${PR_ID} ]; then
+		usage
+		exit 1
+	fi
+
+
+	git fetch ${REPOSITORY_NAME} pull-requests/${PR_ID}/from && git checkout FETCH_HEAD
+}

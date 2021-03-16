@@ -1,17 +1,33 @@
 #!/bin/bash
-DEFAULT_REPOSITORY_NAME="upstream"
 
-REPOSITORY_NAME=${1}
-if [ -z ${REPOSITORY_NAME} ]; then
-	echo "Please provide repository name"
-	exit 1
-fi
+export GIT_BITBUCKET_DIR=$(dirname "$0")
 
-PR_ID=$2
-if [ -z ${PR_ID} ]; then
-	echo "Please provide pull request ID"
-	exit 1
-fi
+usage() {
+	echo "usage: git bitbucket <subcommand>"
+	echo
+	echo "Available subcommands are:"
+	echo "    init    Initialize repository to work with git-bitbucket helper"
+	echo "    review  Checkout bitbucket pull request to review it locally"
+	echo
+	echo "Try \`git bitbucket <subcommand> help\` for details"
+}
 
+main() {
+	if [ $# -lt 1 ]; then
+		usage
+		exit 1
+	fi
 
-git fetch ${REPOSITORY_NAME} pull-requests/${PR_ID}/from && git checkout FETCH_HEAD
+	SUBCOMMAND="$1"; shift
+
+	if [ ! -e "$GIT_BITBUCKET_DIR/git-bitbucket-$SUBCOMMAND" ]; then
+		usage
+		exit 1
+	fi
+
+	. "$GIT_BITBUCKET_DIR/git-bitbucket-$SUBCOMMAND"
+
+	cmd_$SUBCOMMAND "$@"
+}
+
+main "$@"
