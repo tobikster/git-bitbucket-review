@@ -31,7 +31,11 @@ function __fish_get_bitbucket_pullrequests -d "Get open pull requests from the B
 end
 
 set -l bitbucket_command "bitbucket"
+set -l bitbucket_subcommands init review
 
 complete -f -c git -n "__fish_git_needs_command" -a $bitbucket_command -d "Review a Bitbucket's pull request"
-complete -f -c git -n "__fish_git_using_command $bitbucket_command; and not __fish_seen_subcommand_from (__fish_git_remotes) init" -a "(__fish_remotes_configured_for_bitbucket_review)" -d "Remote"
-complete -f -c git -n "__fish_git_using_command $bitbucket_command; and __fish_seen_subcommand_from (__fish_git_remotes)" -a "(__fish_get_bitbucket_pullrequests)"
+complete -f -c git -n "__fish_git_using_command $bitbucket_command; and not __fish_seen_subcommand_from $bitbucket_subcommands" -a "init" -d "Initialize bitbucket repository"
+complete -f -c git -n "__fish_git_using_command $bitbucket_command; and not __fish_seen_subcommand_from $bitbucket_subcommands" -a "review" -d "Chackout PR to review locally"
+complete -f -c git -n "__fish_git_using_command $bitbucket_command; and __fish_seen_subcommand_from init"
+complete -f -c git -n "__fish_git_using_command $bitbucket_command; and __fish_seen_subcommand_from review" -xa "(__fish_remotes_configured_for_bitbucket_review)" -d "Remote"
+complete -f -c git -n "__fish_git_using_command $bitbucket_command; and __fish_seen_subcommand_from review (__fish_git_remotes)" -a "(__fish_get_bitbucket_pullrequests)"

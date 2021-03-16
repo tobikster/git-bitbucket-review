@@ -1,0 +1,10 @@
+#!/bin/bash
+
+usage() {
+	echo "usage: git bitbucket init"
+}
+
+cmd_init() {
+	usage
+	exit 1
+}
