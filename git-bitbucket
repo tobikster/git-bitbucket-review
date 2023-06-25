@@ -6,7 +6,6 @@ usage() {
 	echo "usage: git bitbucket <subcommand>"
 	echo
 	echo "Available subcommands are:"
-	echo "    init    Initialize repository to work with git-bitbucket helper"
 	echo "    review  Checkout bitbucket pull request to review it locally"
 	echo
 	echo "Try \`git bitbucket <subcommand> help\` for details"

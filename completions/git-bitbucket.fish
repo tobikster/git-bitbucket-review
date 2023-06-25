@@ -28,10 +28,7 @@ function __fish_last_argument_matches -d "Check if last argument on the command 
     string match -ar $argv[1] $last_argument >/dev/null
 end
 
-set -l subcommands init review
-
-complete -f -c git-bitbucket -n "not __fish_seen_subcommand_from $subcommands" -a init -d "Initialize repository to work with git-bitbucket"
-complete -f -c git-bitbucket -n "__fish_seen_subcommand_from init"
+set -l subcommands review
 
 complete -f -c git-bitbucket -n "not __fish_seen_subcommand_from $subcommands" -a review -d "Review a PR from Bitbucket"
 complete -f -c git-bitbucket -n "__fish_seen_subcommand_from review; and not __fish_seen_subcommand_from (__fish_git_remotes)" -a "(__fish_remotes_configured_for_bitbucket_review)" -d Remote
