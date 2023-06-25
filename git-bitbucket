@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export GIT_BITBUCKET_DIR=$(dirname "$0")
+export GIT_BITBUCKET_DIR=$(dirname $(realpath "$0"))
 
 usage() {
 	echo "usage: git bitbucket <subcommand>"
@@ -18,7 +18,8 @@ main() {
 		exit 1
 	fi
 
-	SUBCOMMAND="$1"; shift
+	SUBCOMMAND="$1"
+	shift
 
 	if [ ! -e "$GIT_BITBUCKET_DIR/git-bitbucket-$SUBCOMMAND" ]; then
 		usage
