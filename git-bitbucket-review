@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 usage() {
 	echo "usage: git bitbucket review REPOSITORY PR_ID"
 	echo
@@ -18,7 +19,6 @@ cmd_review() {
 		usage
 		exit 1
 	fi
-
 
 	git fetch ${REPOSITORY_NAME} pull-requests/${PR_ID}/from && git checkout FETCH_HEAD
 }
