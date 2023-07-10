@@ -24,7 +24,7 @@ function __fish_get_bitbucket_pullrequests -d "Get open pull requests from the B
     set -l remotes (__fish_remotes_configured_for_bitbucket_review)
     set -l remote $cmd[3]
 
-    set -l oauth_token (__fish_git config --get "bitbucketreview."$remote".oauthtoken")
+    set -l oauth_token_variable (__fish_git config --get "bitbucketreview."$remote".oauth-token-variable")
 
     set -l bitbucket_base_url (__fish_git config --get "bitbucketreview."$remote".bitbucket-url")
     set -l bitbucket_project (__fish_git config --get "bitbucketreview."$remote".project")
@@ -35,7 +35,7 @@ function __fish_get_bitbucket_pullrequests -d "Get open pull requests from the B
 
     functions -e __format_bitbucket_url
 
-    curl -s -LC - --oauth2-bearer "$oauth_token" "$pull_requests_uri" | jq -r '.values[] | {"id": .id, "title": .title, "target": .toRef.displayId} | "\(.id)\t\(.title) -> \(.target)"' # 2>/dev/null
+    curl -s -LC - --oauth2-bearer "$$oauth_token_variable" "$pull_requests_uri" | jq -r '.values[] | {"id": .id, "title": .title, "target": .toRef.displayId} | "\(.id)\t\(.title) -> \(.target)"' # 2>/dev/null
 end
 
 function __fish_last_argument_matches -d "Check if last argument on the command line mathes the regex"
