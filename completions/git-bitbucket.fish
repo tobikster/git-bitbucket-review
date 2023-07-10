@@ -3,7 +3,7 @@
 function __fish_remotes_configured_for_bitbucket_review -d "Get a list of git remotesd, which have been configured to be used with the git-bitbucket-review command"
     set -l remotes (__fish_git_remotes)
     for r in $remotes
-        __fish_git config --get "bitbucketreview."$r".pullrequestsurl" &>/dev/null
+        __fish_git config --get "bitbucketreview."$r".bitbucket-url" &>/dev/null
         set -l remote_configured $status
         if test $remote_configured -eq 0
             echo $r
@@ -12,13 +12,28 @@ function __fish_remotes_configured_for_bitbucket_review -d "Get a list of git re
 end
 
 function __fish_get_bitbucket_pullrequests -d "Get open pull requests from the BitBucket server"
+    function __format_bitbucket_url
+        set -l base_url "$argv[1]"
+        set -l project "$argv[2]"
+        set -l repo "$argv[3]"
+
+        echo $base_url"/rest/api/1.0/projects/"$project"/repos/"$repo"/pull-requests"
+    end
+
     set -l cmd (commandline -opc)
     set -l remotes (__fish_remotes_configured_for_bitbucket_review)
     set -l remote $cmd[3]
 
     set -l oauth_token (__fish_git config --get "bitbucketreview."$remote".oauthtoken")
-    set -l base_pull_requests_uri (__fish_git config --get "bitbucketreview."$remote".pullrequestsurl")
+
+    set -l bitbucket_base_url (__fish_git config --get "bitbucketreview."$remote".bitbucket-url")
+    set -l bitbucket_project (__fish_git config --get "bitbucketreview."$remote".project")
+    set -l bitbucket_repo (__fish_git config --get "bitbucketreview."$remote".repo")
+
+    set -l base_pull_requests_uri (__format_bitbucket_url $bitbucket_base_url $bitbucket_project $bitbucket_repo)
     set -l pull_requests_uri $base_pull_requests_uri"?state=OPEN&order=OLDEST"
+
+    functions -e __format_bitbucket_url
 
     curl -s -LC - --oauth2-bearer "$oauth_token" "$pull_requests_uri" | jq -r '.values[] | {"id": .id, "title": .title, "target": .toRef.displayId} | "\(.id)\t\(.title) -> \(.target)"' # 2>/dev/null
 end
