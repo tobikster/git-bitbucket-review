@@ -17,18 +17,18 @@ function __fish_get_bitbucket_pullrequests -d "Get open pull requests from the B
         set -l project "$argv[2]"
         set -l repo "$argv[3]"
 
-        echo $base_url"/rest/api/1.0/projects/"$project"/repos/"$repo"/pull-requests"
+        echo "$base_url/rest/api/1.0/projects/$project/repos/$repo/pull-requests"
     end
 
     set -l cmd (commandline -opc)
     set -l remotes (__fish_remotes_configured_for_bitbucket_review)
     set -l remote $cmd[3]
 
-    set -l oauth_token_variable (__fish_git config --get "bitbucketreview."$remote".oauth-token-variable")
+    set -l oauth_token_variable (__fish_git config --get "bitbucketreview.$remote.oauth-token-variable")
 
-    set -l bitbucket_base_url (__fish_git config --get "bitbucketreview."$remote".bitbucket-url")
-    set -l bitbucket_project (__fish_git config --get "bitbucketreview."$remote".project")
-    set -l bitbucket_repo (__fish_git config --get "bitbucketreview."$remote".repo")
+    set -l bitbucket_base_url (__fish_git config --get "bitbucketreview.$remote.bitbucket-url")
+    set -l bitbucket_project (__fish_git config --get "bitbucketreview.$remote.project")
+    set -l bitbucket_repo (__fish_git config --get "bitbucketreview.$remote.repo")
 
     set -l base_pull_requests_uri (__format_bitbucket_url $bitbucket_base_url $bitbucket_project $bitbucket_repo)
     set -l pull_requests_uri $base_pull_requests_uri"?state=OPEN&order=OLDEST"
