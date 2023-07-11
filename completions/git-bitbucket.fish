@@ -35,7 +35,7 @@ function __fish_get_bitbucket_pullrequests -d "Get open pull requests from the B
 
     functions -e __format_bitbucket_url
 
-    curl -s -LC - --oauth2-bearer "$$oauth_token_variable" "$pull_requests_uri" | jq -r '.values[] | {"id": .id, "title": .title, "target": .toRef.displayId} | "\(.id)\t\(.title) -> \(.target)"' # 2>/dev/null
+    curl -s -LC - --oauth2-bearer "$$oauth_token_variable" "$pull_requests_uri" | jq -r '.values[] | {"id": .id, "title": .title, "target": .toRef.displayId, "author": .author.user.name} | "\(.id)\t[\(.author)] \(.title) -> \(.target)"' # 2>/dev/null
 end
 
 function __fish_last_argument_matches -d "Check if last argument on the command line mathes the regex"
